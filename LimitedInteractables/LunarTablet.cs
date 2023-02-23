@@ -6,7 +6,7 @@ namespace LimitedInteractables
 {
     public class LunarTablet
     {
-        public static PurchaseInteraction slab;
+        public static GameObject slab;
         public static int uses = 0;
         public static void Patch()
         {
@@ -19,7 +19,7 @@ namespace LimitedInteractables
                     if (Main.LunarTabletCost.Value == 0) pi.gameObject.SetActive(false);
                     else
                     {
-                        slab = pi;
+                        slab = pi.gameObject;
                         pi.cost = Main.LunarTabletCost.Value;
                         uses = Main.LunarTabletUses.Value;
                     }
@@ -29,7 +29,7 @@ namespace LimitedInteractables
             {
                 bool yes = self.CanBeAffordedByInteractor(activator);
                 orig(self, activator);
-                if (self == slab && yes)
+                if (self.gameObject == slab && yes)
                 {
                     uses--;
                     if (uses == 0) self.enabled = false;

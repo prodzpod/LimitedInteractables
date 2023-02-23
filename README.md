@@ -27,3 +27,7 @@ Tweak mod that allows you to configure max uses and other attributes for interac
 
 ## Recycler Tweaks
 - Configurable max uses on a single pickup per recycler.
+
+## Changelog
+- 1.0.1: Made remaining uses show up on context string
+- 1.0.0: Initial Release

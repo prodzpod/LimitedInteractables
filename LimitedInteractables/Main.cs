@@ -20,7 +20,7 @@ namespace LimitedInteractables
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "LimitedInteractables";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.1";
         public static ManualLogSource Log;
         public static Harmony Harmony;
         public static PluginInfo pluginInfo;
@@ -107,7 +107,33 @@ namespace LimitedInteractables
                 if (!NetworkServer.active) return;
                 if (onGenerateInteractableCardSelection != null) onGenerateInteractableCardSelection(director, selection);
             };
+            On.RoR2.PurchaseInteraction.GetContextString += (orig, self, activator) => orig(self, activator) + GetUsesString(self.gameObject);
+            On.RoR2.ShrineCleanseBehavior.GetContextString += (orig, self, activator) => orig(self, activator) + GetUsesString(self.gameObject);
+            On.RoR2.PickupPickerController.GetContextString += (orig, self, activator) => orig(self, activator) + GetUsesString(self.gameObject);
+            On.RoR2.PurchaseInteraction.GetDisplayName += (orig, self) => orig(self) + GetUsesString(self.gameObject);
         }
+        public static string GetUsesString(GameObject obj)
+        {
+            int ret = GetUsesInt(obj);
+            if (ret == -1) return "";
+            return $" ({ret} use{(ret > 1 ? "s" : "")})";
+        }
+
+        public static int GetUsesInt(GameObject obj)
+        {
+            if (uses.ContainsKey(obj) && uses[obj] > 0) return uses[obj];
+            if (obj == LunarTablet.slab && LunarTablet.uses > 0) return LunarTablet.uses;
+            if (Chainloader.PluginInfos.ContainsKey("com.Viliger.ShrineOfRepair")) return GetRepairUses(obj);
+            return -1;
+        }
+
+        public static int GetRepairUses(GameObject obj)
+        {
+            ShrineOfRepair.Modules.Interactables.ShrineOfRepairPicker.ShrineRepairManager m1 = obj.GetComponent<ShrineOfRepair.Modules.Interactables.ShrineOfRepairPicker.ShrineRepairManager>();
+            if (m1 != null && m1.uses < ShrineOfRepair.Modules.ShrineOfRepairConfigManager.MaxUses.Value) return ShrineOfRepair.Modules.ShrineOfRepairConfigManager.MaxUses.Value - m1.uses;
+            return -1;
+        }
+
         public static void InitUses(GameObject self, int use)
         {
             if (!NetworkServer.active) return;
