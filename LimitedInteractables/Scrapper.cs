@@ -1,7 +1,5 @@
 ﻿using RoR2;
-using System;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace LimitedInteractables
 {
@@ -22,6 +20,7 @@ namespace LimitedInteractables
             {
                 GameObject scrapper = self.outer.gameObject;
                 if (scrapper != null && Main.uses.ContainsKey(scrapper)) Main.uses[scrapper]--;
+                if (Run.instance.runRNG.RangeFloat(0, 1) > Main.ScrapperChance.Value) self.scrapperController.lastScrappedItemIndex = ItemIndex.None;
                 orig(self);
             };
         }

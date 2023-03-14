@@ -56,6 +56,12 @@ namespace LimitedInteractables
                 }
                 orig(self, activator);
             };
+            On.RoR2.ShopTerminalBehavior.DropPickup += (orig, self) =>
+            {
+                bool isCleanse = self.gameObject.name.Contains("ShrineCleanse");
+                if (isCleanse && Run.instance.runRNG.RangeFloat(0, 1) > Main.CleansingPoolChance.Value) self.SetHasBeenPurchased(true);
+                else orig(self);
+            };
         }
         public static bool isVoidLunar(ItemTier tier)
         {

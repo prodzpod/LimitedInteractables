@@ -11,6 +11,7 @@ Tweak mod that allows you to configure max uses and other attributes for interac
 - Configurable max amount of stacks to scrap at once.
 - Configurable director cost and frequency for scrappers.
 - Configurable max uses per scrappers.
+- Configurable chance for scrappers to give scrap.
 
 ## [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/) Tweaks
 - Configurable max amount of stacks to repair at once. can only be active for some items.
@@ -24,10 +25,12 @@ Tweak mod that allows you to configure max uses and other attributes for interac
 - Ability for cleansing pool to take [Void Lunar](https://thunderstore.io/package/Bubbet/BubbetsItems/) items.
 - Configurable director cost and frequency for pools.
 - Configurable max uses per pools.
+- Configurable chance for pools to give pearl.
 
 ## Recycler Tweaks
 - Configurable max uses on a single pickup per recycler.
 
 ## Changelog
+- 1.1.0: scrapper/cleanse chance
 - 1.0.1: Made remaining uses show up on context string
 - 1.0.0: Initial Release

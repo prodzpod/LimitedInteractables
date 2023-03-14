@@ -20,7 +20,7 @@ namespace LimitedInteractables
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "LimitedInteractables";
-        public const string PluginVersion = "1.0.1";
+        public const string PluginVersion = "1.1.0";
         public static ManualLogSource Log;
         public static Harmony Harmony;
         public static PluginInfo pluginInfo;
@@ -29,6 +29,7 @@ namespace LimitedInteractables
         public static ConfigEntry<float> ScrapperFrequency;
         public static ConfigEntry<float> ScrapperCost;
         public static ConfigEntry<int> ScrapperMaxUses;
+        public static ConfigEntry<float> ScrapperChance;
         public static ConfigEntry<float> DuplicatorFrequencyWhite;
         public static ConfigEntry<float> DuplicatorFrequencyGreen;
         public static ConfigEntry<float> DuplicatorFrequencyRed;
@@ -50,6 +51,7 @@ namespace LimitedInteractables
         public static ConfigEntry<float> CleansingPoolFrequency;
         public static ConfigEntry<float> CleansingPoolCost;
         public static ConfigEntry<int> CleansingPoolUses;
+        public static ConfigEntry<float> CleansingPoolChance;
         public static ConfigEntry<int> RecyclerMaxUses;
 
         public static Dictionary<GameObject, int> uses;
@@ -82,6 +84,7 @@ namespace LimitedInteractables
             ScrapperFrequency = Config.Bind("Scrapper Tweaks", "Scrapper Frequency", 1f, "Multiplier for Scrapper spawn frequency.");
             ScrapperCost = Config.Bind("Scrapper Tweaks", "Scrapper Cost", 1f, "Multiplier for Scrapper spawn cost.");
             ScrapperMaxUses = Config.Bind("Scrapper Tweaks", "Scrapper Max Uses", 3, "Max number of items to scrap per scrapper. Set to 0 to disable.");
+            ScrapperChance = Config.Bind("Scrapper Tweaks", "Scrapper Chance", 1f, "Chance for scrapper to give you scrap.");
             Scrapper.Patch();
 
             RepairRepairList = Config.Bind("Shrine of Repair Tweaks", "Shrine of Repair True Repair List", "ExtraLifeConsumed, ExtraLifeVoidConsumed, FragileDamageBonusConsumed, HealingPotionConsumed, RegeneratingScrapConsumed, BossHunterConsumed", "List of repairs to count in the following configs.");
@@ -97,6 +100,7 @@ namespace LimitedInteractables
             CleansingPoolFrequency = Config.Bind("Cleansing Pool Tweaks", "Cleansing Pool Frequency", 1f, "Multiplier for Cleansing Pool spawn frequency.");
             CleansingPoolCost = Config.Bind("Cleansing Pool Tweaks", "Cleansing Pool Cost", 1f, "Multiplier for Cleansing Pool spawn cost.");
             CleansingPoolUses = Config.Bind("Cleansing Pool Tweaks", "Cleansing Pool Max Uses", 0, "Set to 0 for vanilla behaviour");
+            CleansingPoolChance = Config.Bind("Cleansing Pool Tweaks", "Cleansing Pool Chance", 1f, "Chance for Cleansing Pool to give you scrap.");
             CleansingPool.Patch();
 
             RecyclerMaxUses = Config.Bind("Recycler Tweaks", "Recycler Max Uses", 1, "Vanilla: 1, set to 0 to disable.");
