@@ -7,8 +7,8 @@ namespace LimitedInteractables
     {
         public static void Patch()
         {
-            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscScrapper", "SpawnCards/InteractableSpawnCard/iscScrapper", Main.ScrapperFrequency.Value, Main.ScrapperCost.Value);
-            if (Main.ScrapperStackAtOnce.Value > 0) On.RoR2.ScrapperController.Start += (orig, self) => { self.maxItemsToScrapAtATime = Main.ScrapperStackAtOnce.Value; orig(self); };
+            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscScrapper", "RoR2/Base/Scrapper/iscScrapper.asset", Main.ScrapperFrequency.Value, Main.ScrapperCost.Value);
+            if (Main.ScrapperStackAtOnce.Value > 0) On.RoR2.ScrapperController.PreStartClient += (orig, self) => { self.maxItemsToScrapAtATime = Main.ScrapperStackAtOnce.Value; orig(self); };
             On.EntityStates.Scrapper.ScrapperBaseState.OnEnter += (orig, self) =>
             {
                 GameObject scrapper = self.outer.gameObject;
@@ -20,7 +20,7 @@ namespace LimitedInteractables
             {
                 GameObject scrapper = self.outer.gameObject;
                 if (scrapper != null && Main.uses.ContainsKey(scrapper)) Main.uses[scrapper]--;
-                if (Run.instance.runRNG.RangeFloat(0, 1) > Main.ScrapperChance.Value) self.scrapperController.lastScrappedItemIndex = ItemIndex.None;
+                if (Run.instance.runRNG.RangeFloat(0, 1) > Main.ScrapperChance.Value) self.scrapperController.pickupPrintQueue[0] = UniquePickup.none;
                 orig(self);
             };
         }

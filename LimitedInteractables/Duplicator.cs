@@ -9,10 +9,10 @@ namespace LimitedInteractables
     {
         public static void Patch()
         {
-            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicator", "SpawnCards/InteractableSpawnCard/iscDuplicator", Main.DuplicatorFrequencyWhite.Value, Main.DuplicatorCostWhite.Value);
-            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicatorLarge", "SpawnCards/InteractableSpawnCard/iscDuplicatorLarge", Main.DuplicatorFrequencyGreen.Value, Main.DuplicatorCostGreen.Value);
-            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicatorMilitary", "SpawnCards/InteractableSpawnCard/iscDuplicatorMilitary", Main.DuplicatorFrequencyRed.Value, Main.DuplicatorCostRed.Value);
-            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicatorWild", "SpawnCards/InteractableSpawnCard/iscDuplicatorWild", Main.DuplicatorFrequencyYellow.Value, Main.DuplicatorCostYellow.Value);
+            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicator", "RoR2/Base/Duplicator/iscDuplicator.asset", Main.DuplicatorFrequencyWhite.Value, Main.DuplicatorCostWhite.Value);
+            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicatorLarge", "RoR2/Base/DuplicatorLarge/iscDuplicatorLarge.asset", Main.DuplicatorFrequencyGreen.Value, Main.DuplicatorCostGreen.Value);
+            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicatorMilitary", "RoR2/Base/DuplicatorMilitary/iscDuplicatorMilitary.asset", Main.DuplicatorFrequencyRed.Value, Main.DuplicatorCostRed.Value);
+            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscDuplicatorWild", "RoR2/Base/DuplicatorWild/iscDuplicatorWild.asset", Main.DuplicatorFrequencyYellow.Value, Main.DuplicatorCostYellow.Value);
             On.RoR2.PurchaseInteraction.Awake += (orig, self) =>
             {
                 orig(self);

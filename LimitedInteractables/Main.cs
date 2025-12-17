@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.AddressableAssets;
 
 namespace LimitedInteractables
 {
@@ -20,7 +21,7 @@ namespace LimitedInteractables
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "LimitedInteractables";
-        public const string PluginVersion = "1.1.0";
+        public const string PluginVersion = "1.3.0";
         public static ManualLogSource Log;
         public static Harmony Harmony;
         public static PluginInfo pluginInfo;
@@ -30,6 +31,18 @@ namespace LimitedInteractables
         public static ConfigEntry<float> ScrapperCost;
         public static ConfigEntry<int> ScrapperMaxUses;
         public static ConfigEntry<float> ScrapperChance;
+        public static ConfigEntry<float> DroneScrapperFrequency;
+        public static ConfigEntry<float> DroneScrapperCost;
+        public static ConfigEntry<int> DroneScrapperMaxUses;
+        public static ConfigEntry<string> DroneAssemblyStages;
+        public static ConfigEntry<float> DroneAssemblyFrequency;
+        public static ConfigEntry<float> DroneAssemblyCost;
+        public static ConfigEntry<int> DroneAssemblyMaxUses;
+        public static ConfigEntry<int> DroneAssemblyMaxSpawns;
+        public static ConfigEntry<float> DroneCombinerFrequency;
+        public static ConfigEntry<float> DroneCombinerCost;
+        public static ConfigEntry<int> DroneCombinerMaxUses;
+        public static ConfigEntry<int> DroneCombinerMaxSpawns;
         public static ConfigEntry<float> DuplicatorFrequencyWhite;
         public static ConfigEntry<float> DuplicatorFrequencyGreen;
         public static ConfigEntry<float> DuplicatorFrequencyRed;
@@ -52,6 +65,8 @@ namespace LimitedInteractables
         public static ConfigEntry<float> CleansingPoolCost;
         public static ConfigEntry<int> CleansingPoolUses;
         public static ConfigEntry<float> CleansingPoolChance;
+        public static ConfigEntry<int> CHEFMaxUses;
+        public static ConfigEntry<float> CHEFChance;
         public static ConfigEntry<int> RecyclerMaxUses;
 
         public static Dictionary<GameObject, int> uses;
@@ -87,6 +102,24 @@ namespace LimitedInteractables
             ScrapperChance = Config.Bind("Scrapper Tweaks", "Scrapper Chance", 1f, "Chance for scrapper to give you scrap.");
             Scrapper.Patch();
 
+            DroneScrapperFrequency = Config.Bind("Drone Scrapper Tweaks", "Scrapper Frequency", 1f, "Multiplier for Drone Scrapper spawn frequency.");
+            DroneScrapperCost = Config.Bind("Drone Scrapper Tweaks", "Scrapper Cost", 1f, "Multiplier for Drone Scrapper spawn cost.");
+            DroneScrapperMaxUses = Config.Bind("Drone Scrapper Tweaks", "Scrapper Max Uses", 3, "Max number of drones to scrap per drone scrapper. Set to 0 to disable.");
+            DroneScrapper.Patch();
+
+            DroneAssemblyStages = Config.Bind("Drone Assembly Station Tweaks", "Drone Assembly Station Stages", "", "Stages to spawn the unused station (separated by comma)");
+            DroneAssemblyMaxSpawns = Config.Bind("Drone Assembly Station Tweaks", "Drone Assembly Station Max Spawns per Stage", -1, "Max number of stations per stage. Set to -1 to uncap.");
+            DroneAssemblyFrequency = Config.Bind("Drone Assembly Station Tweaks", "Drone Assembly Station Frequency", 1f, "Drone Assembly Station spawn frequency.");
+            DroneAssemblyCost = Config.Bind("Drone Assembly Station Tweaks", "Drone Assembly Station Cost", 15f, "Drone Assembly Station spawn cost. default is equal to combiner.");
+            DroneAssemblyMaxUses = Config.Bind("Drone Assembly Station Tweaks", "Drone Assembly Station Max Uses", 1, "Max number of items to upgrade drones. Set to 0 to disable.");
+            DroneAssembly.Patch();
+
+            DroneCombinerMaxSpawns = Config.Bind("Drone Combiner Station Tweaks", "Drone Combiner Station Max Spawns per Stage", 1, "Max number of stations per stage. Set to -1 to uncap.");
+            DroneCombinerFrequency = Config.Bind("Drone Combiner Station Tweaks", "Drone Combiner Station Frequency", 1f, "Multiplier for Drone Combiner Station spawn frequency.");
+            DroneCombinerCost = Config.Bind("Drone Combiner Station Tweaks", "Drone Combiner Station Cost", 1f, "Multiplier for Drone Combiner Station spawn cost.");
+            DroneCombinerMaxUses = Config.Bind("Drone Combiner Station Tweaks", "Drone Combiner Station Max Uses", 3, "Max number of items to combine drones. Set to 0 to disable.");
+            DroneCombiner.Patch();
+
             RepairRepairList = Config.Bind("Shrine of Repair Tweaks", "Shrine of Repair True Repair List", "ExtraLifeConsumed, ExtraLifeVoidConsumed, FragileDamageBonusConsumed, HealingPotionConsumed, RegeneratingScrapConsumed, BossHunterConsumed", "List of repairs to count in the following configs.");
             RepairStackAtOnce = Config.Bind("Shrine of Repair Tweaks", "Shrine of Repair Stacks at Once", 0, "Max number of items to repair at once. ONLY AFFECTS ONES ON TRUE REPAIR LIST. Set to 0 to disable.");
             if (Chainloader.PluginInfos.ContainsKey("com.Viliger.ShrineOfRepair") && RepairStackAtOnce.Value > 0) ShrineRepair.Patch();
@@ -103,6 +136,10 @@ namespace LimitedInteractables
             CleansingPoolChance = Config.Bind("Cleansing Pool Tweaks", "Cleansing Pool Chance", 1f, "Chance for Cleansing Pool to give you scrap.");
             CleansingPool.Patch();
 
+            CHEFMaxUses = Config.Bind("CHEF Tweaks", "CHEF Max Uses", 3, "Max number of items to craft per chef. Set to 0 to disable.");
+            CHEFChance = Config.Bind("CHEF Tweaks", "CHEF Chance", 1f, "Chance for chef to actually give you the item.");
+            MealPrep.Patch();
+
             RecyclerMaxUses = Config.Bind("Recycler Tweaks", "Recycler Max Uses", 1, "Vanilla: 1, set to 0 to disable.");
             Recycler.Patch();
 
@@ -114,6 +151,7 @@ namespace LimitedInteractables
             On.RoR2.PurchaseInteraction.GetContextString += (orig, self, activator) => orig(self, activator) + GetUsesString(self.gameObject);
             On.RoR2.ShrineCleanseBehavior.GetContextString += (orig, self, activator) => orig(self, activator) + GetUsesString(self.gameObject);
             On.RoR2.PickupPickerController.GetContextString += (orig, self, activator) => orig(self, activator) + GetUsesString(self.gameObject);
+            On.RoR2.DroneScrapperPickerController.GetContextString += (orig, self, activator) => orig(self, activator) + GetUsesString(self.gameObject);
             On.RoR2.PurchaseInteraction.GetDisplayName += (orig, self) => orig(self) + GetUsesString(self.gameObject);
         }
         public static string GetUsesString(GameObject obj)
@@ -133,7 +171,7 @@ namespace LimitedInteractables
 
         public static int GetRepairUses(GameObject obj)
         {
-            ShrineOfRepair.Modules.Interactables.ShrineOfRepairPicker.ShrineRepairManager m1 = obj.GetComponent<ShrineOfRepair.Modules.Interactables.ShrineOfRepairPicker.ShrineRepairManager>();
+            ShrineOfRepair.Behaviours.ShrineOfRepairPickerManager m1 = obj.GetComponent<ShrineOfRepair.Behaviours.ShrineOfRepairPickerManager>();
             if (m1 != null && m1.uses < ShrineOfRepair.Modules.ShrineOfRepairConfigManager.MaxUses.Value) return ShrineOfRepair.Modules.ShrineOfRepairConfigManager.MaxUses.Value - m1.uses;
             return -1;
         }
@@ -144,7 +182,7 @@ namespace LimitedInteractables
             if (!uses.ContainsKey(self)) uses.Add(self, use);
             else uses[self] = use;
         }
-        public static void TweakFrequencyAndCost(DirectorCardCategorySelection dccs, string name, string cscName, float frequency, float cost)
+        public static void TweakFrequencyAndCost(DirectorCardCategorySelection dccs, string name, string cscName, float frequency, float cost, int max = -2)
         {
             int index = GetCategoryIndex(dccs, name);
             if (index < 0) return;
@@ -154,8 +192,9 @@ namespace LimitedInteractables
             cards.Remove(orig);
             dccs.categories[index].cards = cards.ToArray();
             if (orig.selectionWeight * frequency <= 0) return; 
-            SpawnCard csc = LegacyResourcesAPI.Load<SpawnCard>(cscName);
+            SpawnCard csc = Addressables.LoadAssetAsync<SpawnCard>(cscName).WaitForCompletion();
             csc.directorCreditCost = Mathf.Max(1, (int)(csc.directorCreditCost * cost));
+            if (max != -2) ((InteractableSpawnCard)csc).maxSpawnsPerStage = max;
             DirectorCard card = new()
             {
                 spawnCard = csc,

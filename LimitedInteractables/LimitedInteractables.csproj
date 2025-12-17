@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<LangVersion>preview</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
@@ -21,6 +21,9 @@
 	  <Reference Include="BubbetsItems">
 	    <HintPath>..\..\libs\BubbetsItems-nstrip.dll</HintPath>
 	  </Reference>
+	  <Reference Include="BubbetsItems">
+	    <HintPath>..\..\libs\BubbetsItems-nstrip.dll</HintPath>
+	  </Reference>
 	  <Reference Include="com.unity.multiplayer-hlapi.Runtime">
 	    <HintPath>..\..\libs\com.unity.multiplayer-hlapi.Runtime-nstrip.dll</HintPath>
 	  </Reference>
@@ -33,6 +36,12 @@
 	  <Reference Include="MMHOOK_RoR2">
 	    <HintPath>..\..\libs\MMHOOK_RoR2-nstrip.dll</HintPath>
 	  </Reference>
+	  <Reference Include="R2API.Addressables">
+	    <HintPath>..\..\libs\R2API.Addressables-nstrip.dll</HintPath>
+	  </Reference>
+	  <Reference Include="R2API.ContentManagement">
+	    <HintPath>..\..\libs\R2API.ContentManagement-nstrip.dll</HintPath>
+	  </Reference>
 	  <Reference Include="R2API.Core">
 	    <HintPath>..\..\libs\R2API.Core-nstrip.dll</HintPath>
 	  </Reference>
@@ -44,9 +53,15 @@
 	  </Reference>
 	  <Reference Include="R2API.Networking">
 	    <HintPath>..\..\libs\R2API.Networking-nstrip.dll</HintPath>
+	  </Reference>
+	  <Reference Include="R2API.Prefab">
+	    <HintPath>..\..\libs\R2API.Prefab-nstrip.dll</HintPath>
 	  </Reference> 
 	  <Reference Include="R2API.RecalculateStats">
 	    <HintPath>..\..\libs\R2API.RecalculateStats-nstrip.dll</HintPath>
+	  </Reference> 
+	  <Reference Include="R2API.SceneAsset">
+	    <HintPath>..\..\libs\R2API.SceneAsset-nstrip.dll</HintPath>
 	  </Reference>
 	  <Reference Include="RoR2">
 	    <HintPath>..\..\libs\RoR2-nstrip.dll</HintPath>

@@ -10,7 +10,7 @@ namespace LimitedInteractables
     {
         public static void Patch()
         {
-            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscShrineCleanse", "SpawnCards/InteractableSpawnCard/iscShrineCleanse", Main.CleansingPoolFrequency.Value, Main.CleansingPoolCost.Value);
+            Main.onGenerateInteractableCardSelection += (dir, sel) => Main.TweakFrequencyAndCost(sel, "iscShrineCleanse", "RoR2/Base/ShrineCleanse/iscShrineCleanse.asset", Main.CleansingPoolFrequency.Value, Main.CleansingPoolCost.Value);
             RoR2Application.onLoad += () =>
             {
                 if (!Main.CleansingPoolTakesEquipments.Value)
